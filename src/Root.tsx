@@ -70,7 +70,7 @@ const typeColors: { [key: string]: string } = {
   steel: "bg-gray-500",
 };
 
-/*
+
 interface PokemonCard {
   id: number;
   image: string;
@@ -93,4 +93,4 @@ async function fetchData(offset: number): Promise<PokemonCard[]> {
     name: item.name,
     types: item.types.map((type) => type.type.name),
   }));
-}*/
+}
