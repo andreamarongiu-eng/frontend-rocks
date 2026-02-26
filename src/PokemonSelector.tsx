@@ -22,6 +22,7 @@ export const PokemonSelector = () => {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [selected, setSelected] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(20); // show in blocks of 20
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -73,13 +74,23 @@ export const PokemonSelector = () => {
   return (
     <div className="pokemon-selector p-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6">
       {loading && <p className="col-span-full text-center">Caricamento...</p>}
-      {pokemons.map((p) => (
+      {pokemons.slice(0, visibleCount).map((p) => (
         <PokemonCard
           key={p.id}
           pokemon={p}
           onInfoClick={() => handleInfo(p)}
         />
       ))}
+
+      {visibleCount < pokemons.length && !loading && (
+        <button
+          onClick={() => setVisibleCount((v) => Math.min(v + 20, pokemons.length))}
+          className="col-span-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition"
+        >
+          Mostra altri Pokémon
+        </button>
+      )}
+
       {selected && (
         <PokemonModal pokemon={selected} onClose={handleClose} />
       )}
