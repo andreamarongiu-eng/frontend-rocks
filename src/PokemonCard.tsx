@@ -49,19 +49,44 @@ const getStatColor = (value: number) => {
 
 export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
   const topStats = pokemon.stats.slice(0, 3);
+  const cardPrice = (pokemon.id * 1.5 + 9.99).toFixed(2);
+  const coinCost = Math.floor(pokemon.id * 5 + 50);
+  const hpStat = pokemon.stats.find((s) => s.name.toLowerCase() === "hp")?.value || Math.max(...pokemon.stats.map(s => s.value));
+  const rarity = pokemon.id % 3 === 0 ? "★" : pokemon.id % 5 === 0 ? "✦" : "●";
+  
+  const handleCardClick = () => {
+    onInfoClick();
+  };
 
   return (
-    <div className="pokemon-card-wrapper">
+    <div className="pokemon-card-wrapper" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="pokemon-card">
         {/* Front Face */}
         <div className="pokemon-card-front">
-          <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-2xl border-4 border-red-400">
+          <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-2xl border-4 border-red-400 relative">
+            {/* Price & Coin Tags */}
+            <div className="absolute top-3 right-3 bg-yellow-300 border-2 border-red-600 rounded-lg px-2 py-1 shadow-lg">
+              <p className="text-xs font-black text-red-600">€{cardPrice}</p>
+            </div>
+            <div className="absolute bottom-3 right-3 bg-gradient-to-r from-yellow-400 to-yellow-300 border-2 border-orange-600 rounded-full px-2 py-1 shadow-lg flex items-center gap-1">
+              <span className="text-lg">🪙</span>
+              <p className="text-xs font-black text-orange-800">{coinCost}</p>
+            </div>
             {/* ID e Nome */}
             <div className="w-full text-center mb-2">
               <p className="text-xs font-bold text-red-600">#{pokemon.id.toString().padStart(3, "0")}</p>
               <h3 className="text-2xl font-black text-gray-800 drop-shadow-md">
                 {pokemon.name}
               </h3>
+              {/* Energy cost icons */}
+              <div className="flex justify-center gap-1 mt-1">
+                {[...Array(Math.ceil(hpStat / 30))].map((_, i) => (
+                  <span
+                    key={i}
+                    className={`w-3 h-3 rounded-full ${typeColors[pokemon.types[0]] || "bg-gray-400"}`}
+                  ></span>
+                ))}
+              </div>
             </div>
 
             {/* Immagine Pokemon */}
@@ -74,7 +99,7 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
             </div>
 
             {/* Types */}
-            <div className="flex gap-2 mb-4 flex-wrap justify-center">
+            <div className="flex gap-2 mb-4 flex-wrap justify-center items-center">
               {pokemon.types.map((type) => (
                 <span
                   key={type}
@@ -83,6 +108,7 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
                   {type}
                 </span>
               ))}
+              <div className="rarity-bubble ml-2">{rarity}</div>
             </div>
 
             {/* Info Button */}
@@ -98,8 +124,16 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
         {/* Back Face - Full Info */}
         <div className="pokemon-card-back">
           <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl border-4 border-purple-700 overflow-hidden">
+                        {/* Small Image Top Left */}
+                        <div className="absolute top-3 left-3 bg-white rounded-lg p-1.5 border-2 border-yellow-300 shadow-lg">
+                          <img
+                            src={pokemon.image}
+                            alt={pokemon.name}
+                            className="w-16 h-16 object-contain"
+                          />
+                        </div>
             {/* Header Back */}
-            <div className="text-center mb-3 w-full">
+            <div className="text-center mb-3 w-full mt-14">
               <h4 className="text-lg font-black text-white drop-shadow-lg">
                 {pokemon.name}
               </h4>
@@ -124,7 +158,7 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
             {/* Top Stats */}
             <div className="w-full mb-3">
               <p className="text-xs font-bold text-white drop-shadow mb-1">Top Stats:</p>
-              <div className="space-y-1">
+              <div className="space-y-1 w-full">
                 {topStats.map((stat) => (
                   <div key={stat.name} className="bg-white bg-opacity-80 rounded p-1">
                     <div className="flex justify-between items-center mb-0.5">
@@ -159,6 +193,8 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
                 ))}
               </div>
             </div>
+            {/* Price tag small on back */}
+            <div className="price-tag-front mt-2 text-sm">€{cardPrice}</div>
           </div>
         </div>
       </div>

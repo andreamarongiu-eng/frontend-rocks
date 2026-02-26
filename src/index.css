@@ -126,13 +126,9 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s;
+  transition: transform 0.6s ease-out;
   transform-style: preserve-3d;
   min-height: 400px;
-}
-
-.pokemon-card-wrapper:hover .pokemon-card {
-  transform: rotateY(180deg);
 }
 
 .pokemon-card-front,
@@ -160,10 +156,6 @@ body {
 .pokemon-image {
   animation: float 2s ease-in-out infinite;
   transition: transform 0.3s ease;
-}
-
-.pokemon-card-wrapper:hover .pokemon-image {
-  transform: scale(1.1) rotate(5deg);
 }
 
 /* ============================================
@@ -267,3 +259,110 @@ button:active::before {
     min-height: 350px;
   }
 }
+
+/* ============================================
+   POKEMON TCG-LIKE CARD STYLES
+   ============================================ */
+
+.card-frame {
+  background: linear-gradient(180deg, #fffef6 0%, #fff7e6 100%);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.8), 0 8px 20px rgba(0,0,0,0.35);
+  border: 6px solid #f5c06a; /* gold-ish outer border like premium cards */
+  position: relative;
+  height: 100%;
+}
+
+.card-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+  border-radius: 8px;
+  border: 2px solid rgba(0,0,0,0.06);
+}
+
+.card-name {
+  font-weight: 800;
+  font-size: 18px;
+  color: #2b2b2b;
+  letter-spacing: 0.6px;
+}
+
+.card-hp {
+  background: linear-gradient(180deg,#ffebeb,#ffdede);
+  color: #b91c1c;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 2px solid rgba(0,0,0,0.06);
+}
+
+.card-illustration {
+  background: linear-gradient(180deg,#ffffff,#f0f8ff);
+  border-radius: 8px;
+  padding: 8px;
+  margin: 12px 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border: 3px solid rgba(0,0,0,0.06);
+}
+
+.card-illustration img{
+  max-width:100%;
+  max-height:180px;
+}
+
+.card-attack {
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  padding: 8px;
+  border: 2px solid rgba(0,0,0,0.06);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.card-attack-name{ font-weight:700; color:#333; font-size:13px }
+.card-attack-dmg{ font-weight:900; color:#a52121 }
+
+.rarity-bubble{
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 6px;
+  padding: 4px 6px;
+  font-size: 12px;
+  font-weight:700;
+}
+
+.price-tag-front{
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  background: linear-gradient(180deg,#fff8d6,#ffe8a6);
+  border:2px solid rgba(0,0,0,0.06);
+  padding:6px 8px;
+  border-radius:6px;
+  font-weight:800;
+  color:#8a2b2b;
+}
+
+.pokeball-decor{
+  position:absolute;
+  top: -20px;
+  right: -20px;
+  width:120px;
+  height:120px;
+  opacity:0.06;
+  background-image: radial-gradient(circle at 30% 30%, #fff 10%, transparent 11%), linear-gradient(90deg,#fff 0%, #fff0 100%);
+  border-radius:50%;
+  transform:rotate(12deg);
+}
+
+.pokemon-card-wrapper{ min-height:460px }
