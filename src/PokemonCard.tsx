@@ -51,6 +51,20 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
   const topStats = pokemon.stats.slice(0, 3);
   const hpStat = pokemon.stats.find((s) => s.name.toLowerCase() === "hp")?.value || Math.max(...pokemon.stats.map(s => s.value));
   const rarity = pokemon.id % 3 === 0 ? "★" : pokemon.id % 5 === 0 ? "✦" : "●";
+
+  // background and border classes derived from rarity
+  const rarityBg =
+    rarity === "★"
+      ? "bg-gradient-to-br from-yellow-400 to-yellow-600"
+      : rarity === "✦"
+      ? "bg-gradient-to-br from-indigo-400 to-indigo-600"
+      : "bg-gradient-to-br from-gray-300 to-gray-400";
+  const rarityBorder =
+    rarity === "★"
+      ? "border-yellow-500"
+      : rarity === "✦"
+      ? "border-indigo-500"
+      : "border-gray-500";
   
   const handleCardClick = () => {
     onInfoClick();
@@ -61,7 +75,7 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
       <div className="pokemon-card">
         {/* Front Face */}
         <div className="pokemon-card-front">
-          <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-2xl border-4 border-red-400 relative">
+          <div className={`h-full flex flex-col items-center justify-between p-4 ${rarityBg} rounded-2xl shadow-2xl border-4 ${rarityBorder} relative`}>
             {/* ID e Nome */}
             <div className="w-full text-center mb-2">
               <p className="text-xs font-bold text-red-600">#{pokemon.id.toString().padStart(3, "0")}</p>
@@ -113,7 +127,7 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
 
         {/* Back Face - Full Info */}
         <div className="pokemon-card-back">
-          <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl border-4 border-purple-700 overflow-hidden">
+          <div className={`h-full flex flex-col items-center justify-between p-4 ${rarityBg} rounded-2xl shadow-2xl border-4 ${rarityBorder} overflow-hidden`}>
                         {/* Small Image Top Left */}
                         <div className="absolute top-3 left-3 bg-white rounded-lg p-1.5 border-2 border-yellow-300 shadow-lg">
                           <img
