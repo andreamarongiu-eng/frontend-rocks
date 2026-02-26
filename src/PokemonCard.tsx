@@ -49,22 +49,28 @@ const getStatColor = (value: number) => {
 
 export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
   const topStats = pokemon.stats.slice(0, 3);
-  const hpStat = pokemon.stats.find((s) => s.name.toLowerCase() === "hp")?.value || Math.max(...pokemon.stats.map(s => s.value));
   const rarity = pokemon.id % 3 === 0 ? "★" : pokemon.id % 5 === 0 ? "✦" : "●";
 
   // background and border classes derived from rarity
   const rarityBg =
     rarity === "★"
-      ? "bg-gradient-to-br from-yellow-400 to-yellow-600"
+      ? "bg-gradient-to-br from-amber-200 via-yellow-300 to-orange-600"
       : rarity === "✦"
-      ? "bg-gradient-to-br from-indigo-400 to-indigo-600"
-      : "bg-gradient-to-br from-gray-300 to-gray-400";
+      ? "bg-gradient-to-br from-indigo-200 via-violet-400 to-purple-700"
+      : "bg-gradient-to-br from-slate-100 via-slate-300 to-slate-700";
   const rarityBorder =
     rarity === "★"
-      ? "border-yellow-500"
+      ? "border-yellow-700"
       : rarity === "✦"
-      ? "border-indigo-500"
-      : "border-gray-500";
+      ? "border-purple-700"
+      : "border-slate-700";
+  
+  const rarityColor =
+    rarity === "★"
+      ? "text-yellow-600"
+      : rarity === "✦"
+      ? "text-purple-600"
+      : "text-slate-600";
   
   const handleCardClick = () => {
     onInfoClick();
@@ -73,128 +79,141 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
   return (
     <div className="pokemon-card-wrapper" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
       <div className="pokemon-card">
-        {/* Front Face */}
+        {/* Front Face - Main Card */}
         <div className="pokemon-card-front">
-          <div className={`h-full flex flex-col items-center justify-between p-4 ${rarityBg} rounded-2xl shadow-2xl border-4 ${rarityBorder} relative`}>
-            {/* ID e Nome */}
-            <div className="w-full text-center mb-2">
-              <p className="text-xs font-bold text-red-600">#{pokemon.id.toString().padStart(3, "0")}</p>
-              <h3 className="text-2xl font-black text-gray-800 drop-shadow-md">
+          <div className={`h-full flex flex-col p-4 ${rarityBg} rounded-3xl relative overflow-hidden border-8 ${rarityBorder} transition-all duration-300 hover:shadow-2xl hover:scale-105`} style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4)' }}>
+            {/* Shine Effect */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)' }}></div>
+            
+            {/* Inner Frame Border */}
+            <div className="absolute inset-4 border-2 border-white border-opacity-30 rounded-2xl pointer-events-none"></div>
+
+            {/* Corner Rarity Badge */}
+            <div className={`absolute top-3 right-3 z-20 ${rarityColor} text-4xl drop-shadow-xl`} style={{ textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>
+              {rarity}
+            </div>
+            
+            {/* Header Section */}
+            <div className="relative z-10 w-full mb-3 bg-white bg-opacity-90 rounded-2xl p-4 shadow-xl border-2 border-white transform hover:scale-105 transition-transform">
+              <p className="text-xs font-black text-slate-600 tracking-widest mb-1 uppercase">#{pokemon.id.toString().padStart(3, "0")}</p>
+              <h3 className="text-2xl font-black text-slate-900 leading-tight" style={{ letterSpacing: '0.5px' }}>
                 {pokemon.name}
               </h3>
-              {/* Energy cost icons */}
-              <div className="flex justify-center gap-1 mt-1">
-                {[...Array(Math.ceil(hpStat / 30))].map((_, i) => (
-                  <span
-                    key={i}
-                    className={`w-3 h-3 rounded-full ${typeColors[pokemon.types[0]] || "bg-gray-400"}`}
-                  ></span>
-                ))}
-              </div>
             </div>
 
-            {/* Immagine Pokemon */}
-            <div className="w-full h-40 flex items-center justify-center bg-gradient-to-b from-blue-200 to-blue-100 rounded-xl mb-3 border-2 border-blue-300 pokemon-image-container">
+            {/* Image Container - Premium Feel */}
+            <div className="relative z-10 w-full flex-1 flex items-center justify-center bg-gradient-to-b from-white via-blue-50 to-blue-100 rounded-2xl mb-4 border-4 border-white shadow-xl transition-transform hover:scale-110 duration-300" style={{ boxShadow: 'inset 0 6px 12px rgba(0,0,0,0.08)' }}>
               <img
                 src={pokemon.image}
                 alt={pokemon.name}
-                className="w-32 h-32 object-contain drop-shadow-lg pokemon-image"
+                className="w-40 h-40 object-contain drop-shadow-2xl"
               />
             </div>
 
-            {/* Types */}
-            <div className="flex gap-2 mb-4 flex-wrap justify-center items-center">
+            {/* Type Badges */}
+            <div className="relative z-10 flex gap-2 mb-4 flex-wrap justify-center">
               {pokemon.types.map((type) => (
                 <span
                   key={type}
-                  className={`px-3 py-1 rounded-full text-white text-xs font-bold capitalize shadow-lg ${typeColors[type] || "bg-gray-500"}`}
+                  className={`px-3 py-1.5 rounded-full text-white text-xs font-black capitalize shadow-lg border border-white border-opacity-60 transition-transform hover:scale-110 ${typeColors[type] || "bg-gray-500"}`}
+                  style={{ backdropFilter: 'blur(4px)' }}
                 >
                   {type}
                 </span>
               ))}
-              <div className="rarity-bubble ml-2">{rarity}</div>
             </div>
 
-            {/* Info Button */}
+            {/* Info Button - Premium Style */}
             <button
               onClick={onInfoClick}
-              className="w-full bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 active:scale-95 border-2 border-red-700"
+              className="relative z-10 w-full bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-black py-3 px-4 rounded-xl shadow-xl transform hover:scale-110 transition-all duration-200 active:scale-95 border-2 border-red-300 hover:border-red-200"
+              style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}
             >
-              ℹ️ Info Pokemon
+              ℹ️ Dettagli
             </button>
           </div>
         </div>
 
         {/* Back Face - Full Info */}
         <div className="pokemon-card-back">
-          <div className={`h-full flex flex-col items-center justify-between p-4 ${rarityBg} rounded-2xl shadow-2xl border-4 ${rarityBorder} overflow-hidden`}>
-                        {/* Small Image Top Left */}
-                        <div className="absolute top-3 left-3 bg-white rounded-lg p-1.5 border-2 border-yellow-300 shadow-lg">
-                          <img
-                            src={pokemon.image}
-                            alt={pokemon.name}
-                            className="w-16 h-16 object-contain"
-                          />
-                        </div>
+          <div className={`h-full flex flex-col p-4 ${rarityBg} rounded-3xl relative overflow-hidden border-8 ${rarityBorder}`} style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4)' }}>
+            {/* Shine Effect */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 100%)' }}></div>
+            
+            {/* Inner Frame Border */}
+            <div className="absolute inset-4 border-2 border-white border-opacity-30 rounded-2xl pointer-events-none"></div>
+
+            {/* Corner Image Badge */}
+            <div className="absolute top-3 right-3 z-20 bg-white rounded-full p-1.5 border-3 border-white shadow-xl">
+              <img
+                src={pokemon.image}
+                alt={pokemon.name}
+                className="w-14 h-14 object-contain"
+              />
+            </div>
+            
             {/* Header Back */}
-            <div className="text-center mb-3 w-full mt-14">
-              <h4 className="text-lg font-black text-white drop-shadow-lg">
+            <div className="relative z-10 w-full bg-white bg-opacity-90 rounded-2xl p-4 shadow-xl border-2 border-white mb-3">
+              <h4 className="text-2xl font-black text-slate-900" style={{ letterSpacing: '0.5px' }}>
                 {pokemon.name}
               </h4>
+              <p className="text-xs font-bold text-slate-600 mt-1 uppercase">Informazioni Completi</p>
             </div>
 
-            {/* Physical Stats */}
-            <div className="w-full grid grid-cols-2 gap-2 mb-3">
-              <div className="bg-white bg-opacity-90 rounded-lg p-2 text-center border-2 border-yellow-300">
-                <p className="text-xs font-bold text-gray-700">Altezza</p>
-                <p className="text-sm font-black text-blue-600">
-                  {(pokemon.height / 10).toFixed(1)}m
-                </p>
+            {/* Stats Section - Scrollable */}
+            <div className="relative z-10 flex-1 overflow-y-auto space-y-2.5 pr-2">
+              {/* Physical Attributes */}
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="bg-white bg-opacity-90 rounded-xl p-3 text-center border-2 border-blue-400 shadow-lg transform hover:scale-105 transition-transform">
+                  <p className="text-xs font-black text-slate-700 uppercase mb-1">Altezza</p>
+                  <p className="text-lg font-black text-blue-700">
+                    {(pokemon.height / 10).toFixed(1)}m
+                  </p>
+                </div>
+                <div className="bg-white bg-opacity-90 rounded-xl p-3 text-center border-2 border-green-400 shadow-lg transform hover:scale-105 transition-transform">
+                  <p className="text-xs font-black text-slate-700 uppercase mb-1">Peso</p>
+                  <p className="text-lg font-black text-green-700">
+                    {(pokemon.weight / 10).toFixed(1)}kg
+                  </p>
+                </div>
               </div>
-              <div className="bg-white bg-opacity-90 rounded-lg p-2 text-center border-2 border-yellow-300">
-                <p className="text-xs font-bold text-gray-700">Peso</p>
-                <p className="text-sm font-black text-green-600">
-                  {(pokemon.weight / 10).toFixed(1)}kg
-                </p>
-              </div>
-            </div>
 
-            {/* Top Stats */}
-            <div className="w-full mb-3">
-              <p className="text-xs font-bold text-white drop-shadow mb-1">Top Stats:</p>
-              <div className="space-y-1 w-full">
+              {/* Stats Bars */}
+              <div className="bg-white bg-opacity-90 rounded-xl p-3 border-2 border-purple-400 shadow-lg">
+                <p className="text-xs font-black text-slate-800 mb-3 uppercase">Statistiche</p>
                 {topStats.map((stat) => (
-                  <div key={stat.name} className="bg-white bg-opacity-80 rounded p-1">
-                    <div className="flex justify-between items-center mb-0.5">
-                      <span className="text-xs font-bold text-gray-700 capitalize">
-                        {stat.name.substring(0, 3)}
+                  <div key={stat.name} className="mb-2.5">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs font-black text-slate-700 uppercase">
+                        {stat.name}
                       </span>
-                      <span className="text-xs font-bold text-gray-600">
+                      <span className="text-xs font-black text-white bg-slate-700 px-2 py-0.5 rounded-lg">
                         {stat.value}
                       </span>
                     </div>
-                    <div className="w-full bg-gray-300 rounded-full h-1.5 overflow-hidden border border-gray-400">
+                    <div className="w-full bg-slate-200 rounded-full h-2.5 overflow-hidden border border-slate-300 shadow-sm">
                       <div
-                        className={`h-full ${getStatColor(stat.value)} transition-all duration-300`}
+                        className={`h-full ${getStatColor(stat.value)} transition-all duration-500 rounded-full`}
                         style={{ width: `${(stat.value / 255) * 100}%` }}
                       ></div>
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* Types on Back */}
-            <div className="w-full">
-              <div className="flex gap-1 flex-wrap justify-center">
-                {pokemon.types.map((type) => (
-                  <span
-                    key={type}
-                    className={`px-2 py-0.5 rounded-full text-white text-xs font-bold capitalize shadow ${typeColors[type] || "bg-gray-500"}`}
-                  >
-                    {type}
-                  </span>
-                ))}
+              {/* Types on Back */}
+              <div className="bg-white bg-opacity-90 rounded-xl p-3 border-2 border-orange-400 shadow-lg">
+                <p className="text-xs font-black text-slate-800 mb-2 uppercase">Tipi</p>
+                <div className="flex gap-1.5 flex-wrap">
+                  {pokemon.types.map((type) => (
+                    <span
+                      key={type}
+                      className={`px-2.5 py-1 rounded-lg text-white text-xs font-black capitalize shadow-lg border border-white border-opacity-60 ${typeColors[type] || "bg-gray-500"}`}
+                    >
+                      {type}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

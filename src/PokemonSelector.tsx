@@ -78,8 +78,8 @@ export const PokemonSelector = () => {
   );
 
   return (
-    <div className="pokemon-selector p-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6">
-      {loading && <p className="col-span-full text-center">Caricamento...</p>}
+    <div className="pokemon-selector min-h-screen bg-black p-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6">
+      {loading && <p className="col-span-full text-center text-white text-lg font-bold">Caricamento...</p>}
 
       {/* search input */}
       <div className="col-span-full flex justify-center mb-4">
@@ -91,7 +91,7 @@ export const PokemonSelector = () => {
             setSearchTerm(e.target.value);
             setVisibleCount(20);
           }}
-          className="w-full max-w-md px-4 py-2 bg-blue-100 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full max-w-md px-4 py-2 bg-gray-800 text-white border-2 border-blue-500 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
       </div>
 
