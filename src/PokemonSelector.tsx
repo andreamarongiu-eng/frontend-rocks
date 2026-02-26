@@ -23,6 +23,7 @@ export const PokemonSelector = () => {
   const [selected, setSelected] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20); // show in blocks of 20
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchPokemons = async () => {
@@ -71,10 +72,30 @@ export const PokemonSelector = () => {
 
   const handleClose = () => setSelected(null);
 
+  // apply search filter
+  const filteredPokemons = pokemons.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="pokemon-selector p-4 grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6">
       {loading && <p className="col-span-full text-center">Caricamento...</p>}
-      {pokemons.slice(0, visibleCount).map((p) => (
+
+      {/* search input */}
+      <div className="col-span-full flex justify-center mb-4">
+        <input
+          type="text"
+          placeholder="Cerca Pokémon..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setVisibleCount(20);
+          }}
+          className="w-full max-w-md px-4 py-2 bg-blue-100 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      {filteredPokemons.slice(0, visibleCount).map((p) => (
         <PokemonCard
           key={p.id}
           pokemon={p}
@@ -82,9 +103,13 @@ export const PokemonSelector = () => {
         />
       ))}
 
-      {visibleCount < pokemons.length && !loading && (
+      {visibleCount < filteredPokemons.length && !loading && (
         <button
-          onClick={() => setVisibleCount((v) => Math.min(v + 20, pokemons.length))}
+          onClick={() =>
+            setVisibleCount((v) =>
+              Math.min(v + 20, filteredPokemons.length)
+            )
+          }
           className="col-span-full bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition"
         >
           Mostra altri Pokémon
