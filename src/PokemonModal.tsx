@@ -142,7 +142,7 @@ export const PokemonModal = ({ pokemon, onClose }: PokemonModalProps) => {
           </div>
         </div>
 
-        {/* Footer */}
+        {/* Footer. */}
         <div className="bg-gray-100 p-4 rounded-b-3xl border-t-2 border-gray-300 flex justify-end gap-3">
           <button
             onClick={onClose}
