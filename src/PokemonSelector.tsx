@@ -27,8 +27,10 @@ export const PokemonSelector = () => {
     const fetchPokemons = async () => {
       setLoading(true);
       try {
-        // fetch first 151 pokemons (Gen I)
-        const list = await PokeAPI.listPokemons(0, 151);
+        // determine total count and then fetch all entries
+        const first = await PokeAPI.listPokemons(0, 1);
+        const total = first.count;
+        const list = await PokeAPI.listPokemons(0, total);
         const details = await Promise.all(
           list.results.map(async (p) => {
             const data = await PokeAPI.getPokemonByName(p.name);

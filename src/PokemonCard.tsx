@@ -49,8 +49,6 @@ const getStatColor = (value: number) => {
 
 export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
   const topStats = pokemon.stats.slice(0, 3);
-  const cardPrice = (pokemon.id * 1.5 + 9.99).toFixed(2);
-  const coinCost = Math.floor(pokemon.id * 5 + 50);
   const hpStat = pokemon.stats.find((s) => s.name.toLowerCase() === "hp")?.value || Math.max(...pokemon.stats.map(s => s.value));
   const rarity = pokemon.id % 3 === 0 ? "★" : pokemon.id % 5 === 0 ? "✦" : "●";
   
@@ -64,14 +62,6 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
         {/* Front Face */}
         <div className="pokemon-card-front">
           <div className="h-full flex flex-col items-center justify-between p-4 bg-gradient-to-br from-white to-yellow-50 rounded-2xl shadow-2xl border-4 border-red-400 relative">
-            {/* Price & Coin Tags */}
-            <div className="absolute top-3 right-3 bg-yellow-300 border-2 border-red-600 rounded-lg px-2 py-1 shadow-lg">
-              <p className="text-xs font-black text-red-600">€{cardPrice}</p>
-            </div>
-            <div className="absolute bottom-3 right-3 bg-gradient-to-r from-yellow-400 to-yellow-300 border-2 border-orange-600 rounded-full px-2 py-1 shadow-lg flex items-center gap-1">
-              <span className="text-lg">🪙</span>
-              <p className="text-xs font-black text-orange-800">{coinCost}</p>
-            </div>
             {/* ID e Nome */}
             <div className="w-full text-center mb-2">
               <p className="text-xs font-bold text-red-600">#{pokemon.id.toString().padStart(3, "0")}</p>
@@ -193,8 +183,6 @@ export const PokemonCard = ({ pokemon, onInfoClick }: PokemonCardProps) => {
                 ))}
               </div>
             </div>
-            {/* Price tag small on back */}
-            <div className="price-tag-front mt-2 text-sm">€{cardPrice}</div>
           </div>
         </div>
       </div>
