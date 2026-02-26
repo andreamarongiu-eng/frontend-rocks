@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? 'https://pippo.github.io/frontend-rocks/' : '/frontend-rocks',
+  base: process.env.NODE_ENV === 'production' ? 'https://andreamarongiu-eng.github.io/frontend-rocks/' : '/frontend-rocks',
   plugins: [react(), tailwindcss()],
 })
 
